@@ -25,10 +25,10 @@ var CompilerAbstract = require('../compiler/compiler-abstract')
 var tootip = require('../ui/tooltip')
 
 
-// AppChain Modification
+// CITA Modification
 var {
-  appendAppChainSettings,
-} = require('./appchain-panel')
+  appendCITASettings,
+} = require('./cita-panel')
 const defaultExport = {}
 
 function runTab (opts, localRegistry) {
@@ -610,8 +610,8 @@ function settings (container, self) {
       ${valueEl}
     </div>
   `
-// AppChain Modification
-appendAppChainSettings.call(self, container)
+// CITA Modification
+appendCITASettings.call(self, container)
 
 // HELPER FUNCTIONS AND EVENTS
   self._deps.udapp.event.register('transactionExecuted', (error, from, to, data, lookupOnly, txResult) => {

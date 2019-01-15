@@ -18,7 +18,7 @@ UniversalDAppUI.prototype.renderInstance = function (contract, address, contract
     noInstances.parentNode.removeChild(noInstances)
   }
   var abi = this.udapp.getABI(contract)
-  // AppChain Modification
+  // CITA Modification
   // Get ABI
   return this.renderInstanceFromABI(abi, address, contractName)
 }
