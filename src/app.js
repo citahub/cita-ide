@@ -355,21 +355,17 @@ function run() {
   })
 
   // ----------------- UniversalDApp -----------------
-  var udapp = new UniversalDApp({
-    removable: false,
-    removable_instances: true
-  })
-  window.udapp = udapp
-  registry.put({
-    api: udapp,
-    name: 'udapp'
+  var udapp = new UniversalDApp(registry)
+  // TODO: to remove when possible
+  registry.put({api: udapp, name: 'udapp'})
+  udapp.event.register('transactionBroadcasted', (txhash, networkName) => {
+    var txLink = executionContext.txDetailsLink(networkName, txhash)
+    if (txLink) registry.get('logCallback').api.logCallback(yo`<a href="${txLink}" target="_blank">${txLink}</a>`)
   })
 
-  var udappUI = new UniversalDAppUI(udapp)
-  registry.put({
-    api: udappUI,
-    name: 'udappUI'
-  })
+  var udappUI = new UniversalDAppUI(udapp, registry)
+  // TODO: to remove when possible
+  registry.put({api: udappUI, name: 'udappUI'})
 
   // ----------------- Tx listener -----------------
   var transactionReceiptResolver = new TransactionReceiptResolver()
@@ -504,7 +500,7 @@ function run() {
   self._components.righthandpanel.init()
   self._components.righthandpanel.event.register('resize', delta => self._adjustLayout('right', delta))
 
-  var txLogger = new TxLogger() // eslint-disable-line  
+  var txLogger = new TxLogger() // eslint-disable-line
 
   var queryParams = new QueryParams()
 
