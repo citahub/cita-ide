@@ -54,6 +54,11 @@ class Recorder {
         record.name = payLoad.funAbi.name
         record.inputs = txHelper.serializeInputs(payLoad.funAbi)
         record.type = payLoad.funAbi.type
+        for (var p in record.parameters) {
+          var thisarg = record.parameters[p]
+          var thistimestamp = this.data._createdContracts[thisarg]
+          if (thistimestamp) record.parameters[p] = `created{${thistimestamp}}`
+        }
 
         this.udapp.getAccounts((error, accounts) => {
           if (error) return console.log(error)
@@ -74,6 +79,13 @@ class Recorder {
       // save back created addresses for the convertion from tokens to real adresses
       this.data._createdContracts[address] = timestamp
       this.data._createdContractsReverse[timestamp] = address
+    })
+    executionContext.event.register('contextChanged', this.clearAll.bind(this))
+    this.event.register('newTxRecorded', (count) => {
+      this.event.trigger('recorderCountChange', [count])
+    })
+    this.event.register('cleared', () => {
+      this.event.trigger('recorderCountChange', [0])
     })
   }
 
