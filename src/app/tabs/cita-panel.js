@@ -427,7 +427,7 @@ const loadContractBtn = yo `
 const appchainEl = yo `
   <div>
     <div class="${css.settings}">
-      <h5>Nervos AppChain</h5>
+      <h5>Deploy to CITA</h5>
       ${chainAddressEl}
       ${chainIdEl}
       ${versionEl}
