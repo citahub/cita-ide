@@ -414,7 +414,7 @@ const submitBtn = yo `
       href="javascript:window.sendToAppChain()"
       style="${btnStyle}"
     >
-      Deploy to AppChain
+      Deploy to CITA
     </a>
   `
 
