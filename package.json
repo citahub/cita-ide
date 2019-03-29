@@ -61,7 +61,7 @@
     "yo-yoify": "^3.7.3"
   },
   "dependencies": {
-    "@cryptape/cita-sdk": "0.21.0",
+    "@cryptape/cita-sdk": "0.22.0",
     "http-server": "0.9.0",
     "remixd": "0.1.8-alpha.6"
   },

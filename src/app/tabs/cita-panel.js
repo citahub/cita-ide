@@ -202,7 +202,7 @@ window.sendToAppChain = () => {
     from: account.address.toLowerCase(),
     nonce: Math.random().toString(),
     quota: +els.quotaLimit,
-    chainId: +els.chainId,
+    chainId: els.chainId,
     version: +els.appchainVersion,
     validUntilBlock: +els.validUntilBlock,
     value: els.appchainValue,
