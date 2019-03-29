@@ -1,5 +1,6 @@
 'use strict'
 
+var $ = require('jquery')
 var csjs = require('csjs-inject')
 var yo = require('yo-yo')
 var async = require('async')
@@ -355,21 +356,17 @@ function run() {
   })
 
   // ----------------- UniversalDApp -----------------
-  var udapp = new UniversalDApp({
-    removable: false,
-    removable_instances: true
-  })
-  window.udapp = udapp
-  registry.put({
-    api: udapp,
-    name: 'udapp'
+  var udapp = new UniversalDApp(registry)
+  // TODO: to remove when possible
+  registry.put({api: udapp, name: 'udapp'})
+  udapp.event.register('transactionBroadcasted', (txhash, networkName) => {
+    var txLink = executionContext.txDetailsLink(networkName, txhash)
+    if (txLink) registry.get('logCallback').api.logCallback(yo`<a href="${txLink}" target="_blank">${txLink}</a>`)
   })
 
-  var udappUI = new UniversalDAppUI(udapp)
-  registry.put({
-    api: udappUI,
-    name: 'udappUI'
-  })
+  var udappUI = new UniversalDAppUI(udapp, registry)
+  // TODO: to remove when possible
+  registry.put({api: udappUI, name: 'udappUI'})
 
   // ----------------- Tx listener -----------------
   var transactionReceiptResolver = new TransactionReceiptResolver()
@@ -490,13 +487,52 @@ function run() {
   let compileTab = new CompileTab(self._components.registry)
   let tabs = {
     compile: compileTab,
-    run: new RunTab(self._components.registry),
+    run: new RunTab(
+      registry.get('udapp').api,
+      registry.get('udappUI').api,
+      registry.get('config').api,
+      registry.get('filemanager').api,
+      registry.get('editor').api,
+      registry.get('logCallback').api,
+      registry.get('filepanel').api,
+      registry.get('pluginmanager').api,
+      registry.get('compilersartefacts').api
+    ),
     settings: new SettingsTab(self._components.registry),
-    analysis: new AnalysisTab(self._components.registry),
-    debug: new DebuggerTab(self._components.registry),
-    support: new SupportTab(self._components.registry),
+    analysis: new AnalysisTab(registry),
+    debug: new DebuggerTab(),
+    support: new SupportTab(),
     test: new TestTab(self._components.registry, compileTab)
   }
+
+  registry.get('app').api.event.register('tabChanged', (tabName) => {
+    if (tabName === 'Support') tabs.support.loadTab()
+  })
+
+  let transactionContextAPI = {
+    getAddress: (cb) => {
+      cb(null, $('#txorigin').val())
+    },
+    getValue: (cb) => {
+      try {
+        var number = document.querySelector('#value').value
+        var select = document.getElementById('unit')
+        var index = select.selectedIndex
+        var selectedUnit = select.querySelectorAll('option')[index].dataset.unit
+        var unit = 'ether' // default
+        if (['ether', 'finney', 'gwei', 'wei'].indexOf(selectedUnit) >= 0) {
+          unit = selectedUnit
+        }
+        cb(null, executionContext.web3().toWei(number, unit))
+      } catch (e) {
+        cb(e)
+      }
+    },
+    getGasLimit: (cb) => {
+      cb(null, $('#gasLimit').val())
+    }
+  }
+  udapp.resetAPI(transactionContextAPI)
 
   // ---------------- Righthand-panel --------------------
   self._components.righthandpanel = new RighthandPanel({ tabs, pluginManager })
@@ -504,7 +540,7 @@ function run() {
   self._components.righthandpanel.init()
   self._components.righthandpanel.event.register('resize', delta => self._adjustLayout('right', delta))
 
-  var txLogger = new TxLogger() // eslint-disable-line  
+  var txLogger = new TxLogger() // eslint-disable-line
 
   var queryParams = new QueryParams()
 

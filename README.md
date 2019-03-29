@@ -1,37 +1,36 @@
-[![AppChain](https://img.shields.io/badge/made%20for-Nervos%20AppChain-blue.svg)](https://appchain.nervos.org)
 [![CircleCI](https://circleci.com/gh/ethereum/remix-ide.svg?style=svg)](https://circleci.com/gh/ethereum/remix-ide)
 [![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=MTc5WVBoNnhOTGhaUng3ZFI3MDZvNWkraHIrd1FNanZIZk80SG9uMkFIND0tLUoyUjd1YVhWRnRrcUJMMnFlbmN3Y0E9PQ==--4085377897aef217e507c8fc46d463eb699838b8)](https://www.browserstack.com/automate/public-build/MTc5WVBoNnhOTGhaUng3ZFI3MDZvNWkraHIrd1FNanZIZk80SG9uMkFIND0tLUoyUjd1YVhWRnRrcUJMMnFlbmN3Y0E9PQ==--4085377897aef217e507c8fc46d463eb699838b8)
 
 
-# AppChain IDE
+# CITA IDE
 
-AppChain IDE is a browser-based IDE for [Nervos AppChain](https://docs.nervos.org), mostly based on and will keep updating with [Remix](https://github.com/ethereum/remix-ide/).
+CITA IDE is a browser-based IDE for [CITA](https://github.com/cryptape/cita), mostly based on and will keep updating with [Remix](https://github.com/ethereum/remix-ide/).
 
 ## Usage
 
-Apart from basic usage of remix, AppChain IDE help to deploy contracts to a specified AppChain.
+Apart from basic usage of remix, CITA IDE help to deploy contracts to a specified CITA.
 
 ### Deploy
 
-AppChain IDE provides a panel to deploy contracts to a specified AppChain.
+CITA IDE provides a panel to deploy contracts to a specified CITA.
 
 ![](https://cdn.cryptape.com/images/appchain-ide-panel.png)
 
 After contract modified, click on <kbd>Load Contracts</kbd> to load latest ones, auto reload will be enabled soon.
 
-Select the target contract and fill constructor parameters, then click on <kbd>Deploy to AppChain</kbd> to start a transaction of deployment.
+Select the target contract and fill constructor parameters, then click on <kbd>Deploy to CITA</kbd> to start a transaction of deployment.
 
-AppChain IDE is built on [@appchain/base](https://www.npmjs.com/package/@appchain/base), where you can get more details about the transaction parameters.
+CITA IDE is built on [@cryptape/cita-sdk](https://www.npmjs.com/package/@cryptape/cita-sdk), where you can get more details about the transaction parameters.
 
 BTW, if <kbd>Auto</kbd> is checked, the field `validUntilBlock` will be updated automatically; if <kbd>Store ABI on chain</kbd> is checked, the ABI of the contract will be sent to the chain.
 
-By the deployment, related information will be printed on the terminal, and at the end of it, transaction and contract's links to Microscope(AppChain Explorer) will be provided for more information of them.
+By the deployment, related information will be printed on the terminal, and at the end of it, transaction and contract's links to Microscope(CITA Explorer) will be provided for more information of them.
 
 ## Builtin Contracts
 
-AppChain IDE adds [open-zeppelin](https://github.com/OpenZeppelin/openzeppelin-solidity/) as a dependency, which means AppChain IDE is able to add contracts from openzeppelin-solidity as builtin contracts.
+CITA IDE adds [open-zeppelin](https://github.com/OpenZeppelin/openzeppelin-solidity/) as a dependency, which means CITA IDE is able to add contracts from openzeppelin-solidity as builtin contracts.
 
-In the future, AppChain will add appchain-based contracts as builtin contracts.
+In the future, CITA IDE will add cita-based contracts as builtin contracts.
 
 ![](https://cdn.cryptape.com/images/appchain-ide-files.png)
 

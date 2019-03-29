@@ -202,7 +202,7 @@ window.sendToAppChain = () => {
     from: account.address.toLowerCase(),
     nonce: Math.random().toString(),
     quota: +els.quotaLimit,
-    chainId: +els.chainId,
+    chainId: els.chainId,
     version: +els.appchainVersion,
     validUntilBlock: +els.validUntilBlock,
     value: els.appchainValue,
@@ -414,7 +414,7 @@ const submitBtn = yo `
       href="javascript:window.sendToAppChain()"
       style="${btnStyle}"
     >
-      Deploy to AppChain
+      Deploy to CITA
     </a>
   `
 
@@ -427,7 +427,7 @@ const loadContractBtn = yo `
 const appchainEl = yo `
   <div>
     <div class="${css.settings}">
-      <h5>Nervos AppChain</h5>
+      <h5>Deploy to CITA</h5>
       ${chainAddressEl}
       ${chainIdEl}
       ${versionEl}
