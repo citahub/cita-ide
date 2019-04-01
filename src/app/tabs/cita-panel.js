@@ -1,5 +1,5 @@
 const yo = require('yo-yo')
-const AppChain = require('@appchain/base').default
+const CITA = require('@cryptape/cita-sdk').default
 const defaultSets = {
   chain: 'https://node.cryptape.com',
   chainId: 1,
@@ -14,7 +14,7 @@ const els = {}
 
 const storeAbiElId = 'store-abi-on-chain'
 const autoBlockNumberElId = 'auto-valid-until-block'
-const appchain = AppChain(defaultSets.chain)
+const cita = CITA(defaultSets.chain)
 const microscope = `://microscope.cryptape.com`
 
 const css = require('./styles/run-tab-styles')
@@ -24,12 +24,12 @@ const ids = {
   chainId: 'chainId',
   privateKey: 'privateKey',
   quotaLimit: 'quotaLimit',
-  appchainValue: 'appchainValue',
+  citaValue: 'citaValue',
   validUntilBlock: 'validUntilBlock',
-  appchainVersion: 'appchainVersion'
+  citaVersion: 'citaVersion'
 }
 
-const contractsPanelId = 'appchain-contracts'
+const contractsPanelId = 'cita-contracts'
 const contractInterfaceId = 'contract-interface'
 window.onload = () => {
   const logPanel = document.querySelector("[class^=journal]")
@@ -90,7 +90,7 @@ window.onload = () => {
  * @function useCtrConstructorWith
  */
 const useCtrConstructorWith = (cb) => {
-  const constructor = window.remix.appchain.contracts.selected.props.abi.filter(abi => abi.type === 'constructor')[0]
+  const constructor = window.remix.cita.contracts.selected.props.abi.filter(abi => abi.type === 'constructor')[0]
   if (constructor) {
     return cb(constructor)
   } else {
@@ -105,11 +105,11 @@ const appendParamInputs = (constructor) => {
   const inputs = constructor.inputs.map(input => {
     return `
         <div style="display:flex; margin: 8px 0;">
-          <label for="appchain-constructor-${input.name}" style="flex-basis: 100px; text-align: right; padding-right: 15px;">${input.name}:</label>
+          <label for="cita-constructor-${input.name}" style="flex-basis: 100px; text-align: right; padding-right: 15px;">${input.name}:</label>
           <input
             class="${css.col2}"
             style="flex: 1;"
-            id="appchain-constructor-${input.name}"
+            id="cita-constructor-${input.name}"
             placeholder="${input.type}"
           />
         </div>
@@ -120,14 +120,14 @@ const appendParamInputs = (constructor) => {
 
 // return constructor fields value
 const readConstructorInputs = (constructor) => constructor ? constructor.inputs.map(input => {
-  return document.getElementById(`appchain-constructor-${input.name}`).value
+  return document.getElementById(`cita-constructor-${input.name}`).value
 }) : []
 
 const handleTxResult = (txRes) => {
   log.table('Transaction Result')
   log.table(txRes)
   if (txRes.hash) {
-    appchain.listeners.listenToTransactionReceipt(txRes.hash).then(receipt => {
+    cita.listeners.listenToTransactionReceipt(txRes.hash).then(receipt => {
       log.table('Transaction Receipt')
       log.table(receipt)
       if (!receipt.contractAddress) return
@@ -138,11 +138,11 @@ const handleTxResult = (txRes) => {
       if (document.getElementById(storeAbiElId).checked) {
         log.table("Storing ABI")
         // store abi
-        return appchain.base.storeAbi(receipt.contractAddress, window.remix.appchain.contracts.selected.props.abi,
+        return cita.base.storeAbi(receipt.contractAddress, window.remix.cita.contracts.selected.props.abi,
           Object.assign({}, tx, {
             value: '0',
             data: '',
-            privateKey: appchain.base.accounts.wallet[0].privateKey
+            privateKey: cita.base.accounts.wallet[0].privateKey
           })
         ).then(receipt => {
           if (receipt.errorMessage) {
@@ -163,11 +163,11 @@ const handleTxResult = (txRes) => {
 }
 
 /**
- * @function sendToAppChain
- * @desc send Tx to AppChain
+ * @function sendToCITA
+ * @desc send Tx to CITA
  */
-window.sendToAppChain = () => {
-  if (!window.remix.appchain.contracts.selected) {
+window.sendToCITA = () => {
+  if (!window.remix.cita.contracts.selected) {
     log.error("Load and select contract first")
     return new Error("Load and select contract first")
   }
@@ -187,33 +187,33 @@ window.sendToAppChain = () => {
     log.error('Chain Address Required')
     return new Error("Chain Address Required")
   } else {
-    appchain.currentProvider.host = els.chainAddress
+    cita.currentProvider.host = els.chainAddress
   }
-  log.table(`Chain Address: ${appchain.currentProvider.host}`)
+  log.table(`Chain Address: ${cita.currentProvider.host}`)
   if (!els.privateKey) {
     log.error("Private Key Required")
     return new Error("Private Key Required")
   }
 
-  const account = appchain.base.accounts.privateKeyToAccount(els.privateKey)
-  appchain.base.accounts.wallet.add(account)
+  const account = cita.base.accounts.privateKeyToAccount(els.privateKey)
+  cita.base.accounts.wallet.add(account)
 
   tx = {
     from: account.address.toLowerCase(),
     nonce: Math.random().toString(),
     quota: +els.quotaLimit,
-    chainId: +els.chainId,
-    version: +els.appchainVersion,
+    chainId: els.chainId,
+    version: +els.citaVersion,
     validUntilBlock: +els.validUntilBlock,
-    value: els.appchainValue,
+    value: els.citaValue,
   }
-  const myContract = new appchain.base.Contract(window.remix.appchain.contracts.selected.props.abi)
+  const myContract = new cita.base.Contract(window.remix.cita.contracts.selected.props.abi)
   const {
     selected
-  } = window.remix.appchain.contracts
+  } = window.remix.cita.contracts
 
   if (document.getElementById("auto-valid-until-block").checked) {
-    appchain.base.getBlockNumber().then(blockNumber => {
+    cita.base.getBlockNumber().then(blockNumber => {
       tx.validUntilBlock = +blockNumber + 88
       document.getElementById(ids.validUntilBlock).value = tx.validUntilBlock
       log.table('Block Height')
@@ -243,7 +243,7 @@ window.sendToAppChain = () => {
  * @function loadConstructParams
  */
 const loadConstructParams = () => {
-  const ctrName = window.remix.appchain.contracts.selected
+  const ctrName = window.remix.cita.contracts.selected
   if (!ctrName) return
   useCtrConstructorWith(appendParamInputs)
 }
@@ -252,9 +252,9 @@ const loadConstructParams = () => {
  * @function setSelectedContract
  */
 const setSelectedContract = (name) => {
-  window.remix.appchain.contracts.selected = {
+  window.remix.cita.contracts.selected = {
     name,
-    props: window.remix.appchain.contracts.loaded[name]
+    props: window.remix.cita.contracts.loaded[name]
   }
   loadConstructParams()
 }
@@ -263,8 +263,8 @@ const optionGen = (ctrName, ctr) =>
   `<option id=${ctrName} title=${ctrName} value=${ctrName}>${ctrName}</option>`
 
 /**
- * @function appendContractsToAppChainPanel
- * @desc append loaded contracts to appchain panel
+ * @function appendContractsToCITAPanel
+ * @desc append loaded contracts to cita panel
  */
 const appendContractsToAppChainPanel = contracts => {
   const contractPanel = document.getElementById(contractsPanelId)
@@ -334,7 +334,7 @@ const versionEl = yo `
     <div class="${css.col1_1}">Version</div>
     <input type="text"
     class="${css.col2}"
-    id=${ids.appchainVersion}
+    id=${ids.citaVersion}
     value=${defaultSets.version} >
   </div>
 `
@@ -365,7 +365,7 @@ const appchainValueEl = yo `
       <input
         type="text"
         class="${css.col2}"
-        id=${ids.appchainValue}
+        id=${ids.citaValue}
         value=${defaultSets.value}
         title="Enter the value"
         placeholder="Enter the value"
@@ -411,7 +411,7 @@ const btnStyle = `
 `
 const submitBtn = yo `
     <a
-      href="javascript:window.sendToAppChain()"
+      href="javascript:window.sendToCITA()"
       style="${btnStyle}"
     >
       Deploy to AppChain
@@ -427,7 +427,7 @@ const loadContractBtn = yo `
 const appchainEl = yo `
   <div>
     <div class="${css.settings}">
-      <h5>Nervos AppChain</h5>
+      <h5>CITA</h5>
       ${chainAddressEl}
       ${chainIdEl}
       ${versionEl}
@@ -445,6 +445,6 @@ const appchainEl = yo `
     </div>
   </div>
 `
-export const appendAppChainSettings = function (container) {
+export const appendCITASettings = function (container) {
   container.appendChild(appchainEl)
 }
