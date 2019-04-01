@@ -266,7 +266,7 @@ const optionGen = (ctrName, ctr) =>
  * @function appendContractsToCITAPanel
  * @desc append loaded contracts to cita panel
  */
-const appendContractsToAppChainPanel = contracts => {
+const appendContractsToCITAPanel = contracts => {
   const contractPanel = document.getElementById(contractsPanelId)
   if (!contracts) {
     contractPanel.innerHTML = 'No Contracts Loaded Yet'
@@ -281,7 +281,7 @@ const appendContractsToAppChainPanel = contracts => {
         })
       }
     }
-    window.remix.appchain.contracts.loaded = ctrs
+    window.remix.cita.contracts.loaded = ctrs
     const options = `
     <label for="selectCtrOptions" style="min-width: 150px; padding-right: 15px; text-align: right;">Contracts:</label>
     <select id="selectCtrOptions" class="${css.select}">
@@ -307,7 +307,7 @@ const appendContractsToAppChainPanel = contracts => {
  */
 window.loadContracts = () => {
   const contracts = window.udapp._deps.compiler.getContracts()
-  appendContractsToAppChainPanel(contracts)
+  appendContractsToCITAPanel(contracts)
 }
 
 const chainAddressEl = yo `
@@ -359,7 +359,7 @@ const quotaLimitEl = yo `
       >
     </div>
   `
-const appchainValueEl = yo `
+const citaValueEl = yo `
     <div class="${css.crow}">
       <div class="${css.col1_1}">Value</div>
       <input
@@ -414,7 +414,7 @@ const submitBtn = yo `
       href="javascript:window.sendToCITA()"
       style="${btnStyle}"
     >
-      Deploy to AppChain
+      Deploy to CITA
     </a>
   `
 
@@ -424,7 +424,7 @@ const loadContractBtn = yo `
     style="${btnStyle}"
   >Load Contracts</a>
 `
-const appchainEl = yo `
+const citaEl = yo `
   <div>
     <div class="${css.settings}">
       <h5>CITA</h5>
@@ -433,7 +433,7 @@ const appchainEl = yo `
       ${versionEl}
       ${privateKeyEl}
       ${quotaLimitEl}
-      ${appchainValueEl}
+      ${citaValueEl}
       ${validUntilBlockEl}
       ${storeAbiEl}
       <div>
@@ -446,5 +446,5 @@ const appchainEl = yo `
   </div>
 `
 export const appendCITASettings = function (container) {
-  container.appendChild(appchainEl)
+  container.appendChild(citaEl)
 }
