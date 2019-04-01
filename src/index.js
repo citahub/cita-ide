@@ -8,7 +8,7 @@ var app = new App({})
 
 document.body.appendChild(app.render())
 if (window.remix) {
-  window.remix.appchain = {
+  window.remix.cita = {
     contracts: {},
     helpers: {}
   }

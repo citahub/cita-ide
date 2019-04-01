@@ -55,12 +55,12 @@ module.exports = class SupportTab {
       <div class="${css.info}">
         <div class=${css.title}>Faucet</div>
         <div class="${css.crow}">
-          Faucet is a tool for developers to get test token for AppChain Testnet. 
+          Faucet is a tool for developers to get test token for CITA Testnet. 
         </div>
         <div class="${css.crow}">Faucet website:</div>
         <div class="${css.crow}"><a target="_blank" href="https://dapp.cryptape.com/faucet/">https://dapp.cryptape.com/faucet/</a></div>
         <div class="${css.crow}">More infos:</div>
-        <div class="${css.crow}"><a target="_blank" href="https://github.com/cryptape/appchain-testnet-faucet">https://github.com/cryptape/appchain-testnet-faucet</a></div>
+        <div class="${css.crow}"><a target="_blank" href="https://github.com/cryptape/cita-testnet-faucet">https://github.com/cryptape/cita-testnet-faucet</a></div>
       </div>`
     self._view.config.localremixd = yo `
       <div class="${css.info}">
@@ -79,8 +79,8 @@ module.exports = class SupportTab {
       <div class="${css.supportTabView}" id="supportView">
         <div class="${css.infoBox}">
           Have a question, found a bug or want to propose a feature? Have a look at the
-          <a target="_blank" href='https://github.com/cryptape/appchain-ide/issues'> issues</a> or check out
-          <a target="_blank" href='https://github.com/cryptape/appchain-ide'> the documentation page on appchain-ide</a> or
+          <a target="_blank" href='https://github.com/cryptape/cita-ide/issues'> issues</a> or check out
+          <a target="_blank" href='https://github.com/cryptape/cita-ide'> the documentation page on cita-ide</a> or
           <a target="_blank" href='https://solidity.readthedocs.io/en/latest/'> Solidity</a>.
         </div>
         <div class="${css.chat}">
