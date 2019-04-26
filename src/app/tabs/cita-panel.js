@@ -196,9 +196,9 @@ window.sendToCITA = () => {
   }
 
   const account = cita.base.accounts.privateKeyToAccount(els.privateKey)
-  cita.base.accounts.wallet.add(account)
 
   tx = {
+    privateKey: els.privateKey,
     from: account.address.toLowerCase(),
     nonce: Math.random().toString(),
     quota: +els.quotaLimit,
