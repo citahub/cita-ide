@@ -142,7 +142,7 @@ const handleTxResult = (txRes) => {
           Object.assign({}, tx, {
             value: '0',
             data: '',
-            privateKey: cita.base.accounts.wallet[0].privateKey
+            privateKey: els.privateKey,
           })
         ).then(receipt => {
           if (receipt.errorMessage) {
