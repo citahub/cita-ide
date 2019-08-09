@@ -6,7 +6,7 @@ const defaultSets = {
   privateKey: '',
   quotaLimit: 53000,
   value: 0,
-  version: 1,
+  version: 2,
 }
 
 let tx = {}
