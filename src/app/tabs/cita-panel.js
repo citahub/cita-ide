@@ -1,7 +1,7 @@
 const yo = require('yo-yo')
 const CITA = require('@cryptape/cita-sdk').default
 const defaultSets = {
-  chain: 'https://node.cryptape.com',
+  chain: 'https://node.citahub.com',
   chainId: 1,
   privateKey: '',
   quotaLimit: 53000,
@@ -15,7 +15,7 @@ const els = {}
 const storeAbiElId = 'store-abi-on-chain'
 const autoBlockNumberElId = 'auto-valid-until-block'
 const cita = CITA(defaultSets.chain)
-const microscope = `://microscope.cryptape.com`
+const microscope = `://microscope.citahub.com`
 
 const css = require('./styles/run-tab-styles')
 
