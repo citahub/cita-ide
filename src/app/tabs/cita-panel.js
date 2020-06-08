@@ -1,7 +1,7 @@
 const yo = require('yo-yo')
 const CITA = require('@cryptape/cita-sdk').default
 const defaultSets = {
-  chain: 'https://node.citahub.com',
+  chain: 'https://testnet.citahub.com',
   chainId: 1,
   privateKey: '',
   quotaLimit: 53000,
