@@ -1,0 +1,10 @@
+version: '3'
+services:
+  cita-ide:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: cita-ide:latest
+    container_name: cita-ide
+    ports:
+      - 9000:9000
