@@ -43,7 +43,7 @@
     "remix-lib": "0.3.13",
     "remix-solidity": "0.2.14",
     "remix-tests": "0.0.21",
-    "remixd": "git+https://github.com/ethereum/remixd.git",
+    "remixd": "0.2.0-alpha.5",
     "request": "^2.83.0",
     "rimraf": "^2.6.1",
     "selenium-standalone": "^6.0.1",
@@ -62,8 +62,7 @@
   "dependencies": {
     "@cryptape/cita-sdk": "0.24.1",
     "ethers": "^4.0.20",
-    "http-server": "0.9.0",
-    "remixd": "git+https://github.com/ethereum/remixd.git"
+    "http-server": "0.9.0"
   },
   "repository": {
     "type": "git",
@@ -172,7 +171,7 @@
     "nightwatch_remote_debugger_parallel": "nightwatch --config nightwatch_debugger.js --env safari,chrome,default",
     "onchange": "onchange build/app.js -- npm-run-all",
     "prepublish": "mkdirp build; npm-run-all -ls downloadsolc_root build",
-    "remixd": "./node_modules/remixd/bin/remixd -s ./contracts --remix-ide http://127.0.0.1:8080",
+    "remixd": "./node_modules/.bin/remixd -s ./contracts --remix-ide http://127.0.0.1:8080",
     "selenium": "execr --silent selenium-standalone start",
     "selenium-install": "selenium-standalone install",
     "serve": "execr --silent http-server .",
