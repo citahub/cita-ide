@@ -60,9 +60,9 @@
     "yo-yoify": "^3.7.3"
   },
   "dependencies": {
-    "@cryptape/cita-sdk": "0.24.1",
+    "@citahub/cita-ee-sdk": "1.3.0",
     "ethers": "^4.0.20",
-    "http-server": "0.9.0"
+    "http-server": "0.12.3"
   },
   "repository": {
     "type": "git",

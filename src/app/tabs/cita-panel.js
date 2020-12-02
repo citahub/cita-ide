@@ -1,26 +1,44 @@
 const yo = require('yo-yo')
-const CITA = require('@cryptape/cita-sdk').default
-const defaultSets = {
-  chain: 'https://testnet.citahub.com',
+const CITA = require('@citahub/cita-ee-sdk').default
+const secp256k1Sets = {
+  chain: 'https://testnet.rivus.rivtower.com',
   chainId: 1,
   privateKey: '',
   quotaLimit: 53000,
   value: 0,
   version: 2,
+  cryptoTx:0,
 }
 
+const sm2Sets = {
+  chain: 'https://testnet-sm2.rivus.rivtower.com',
+  chainId: 1,
+  privateKey: '',
+  quotaLimit: 53000,
+  value: 0,
+  version: 2,
+  cryptoTx:1,
+}
+
+const options = {
+  "CITA-secp256k1": secp256k1Sets,
+  "CITA-sm2": sm2Sets,
+  "ethereum": secp256k1Sets
+}
+
+let sets = secp256k1Sets
 let tx = {}
 const els = {}
 
 const storeAbiElId = 'store-abi-on-chain'
 const autoBlockNumberElId = 'auto-valid-until-block'
-const cita = CITA(defaultSets.chain)
+let cita = CITA(sets.chain, undefined, 1)
 const microscope = `://microscope.citahub.com`
 
 const css = require('./styles/run-tab-styles')
 
 const ids = {
-  chainAddress: 'chainAddress',
+  // chainAddress: 'chainAddress',
   chainId: 'chainId',
   privateKey: 'privateKey',
   quotaLimit: 'quotaLimit',
@@ -183,12 +201,6 @@ window.sendToCITA = () => {
   log.table('Arguments')
   log.table(_arguments)
 
-  if (!els.chainAddress) {
-    log.error('Chain Address Required')
-    return new Error("Chain Address Required")
-  } else {
-    cita.currentProvider.host = els.chainAddress
-  }
   log.table(`Chain Address: ${cita.currentProvider.host}`)
   if (!els.privateKey) {
     log.error("Private Key Required")
@@ -206,6 +218,7 @@ window.sendToCITA = () => {
     version: +els.citaVersion,
     validUntilBlock: +els.validUntilBlock,
     value: els.citaValue,
+    cryptoTx: sets.cryptoTx
   }
   const myContract = new cita.base.Contract(window.remix.cita.contracts.selected.props.abi)
   const {
@@ -310,14 +323,17 @@ window.loadContracts = () => {
   appendContractsToCITAPanel(contracts)
 }
 
+const handleChainChange = (e) => {
+  sets = options[e.target.value]
+  cita = CITA(sets.chain, undefined, sets.cryptoTx)
+}
 const chainAddressEl = yo `
     <div class="${css.crow}">
       <div class="${css.col1_1}">Chain Address</div>
-      <input type="text"
-        class="${css.col2}"
-        id=${ids.chainAddress}
-        value=${defaultSets.chain}
-      />
+      <select class="${css.col2}" onchange=${handleChainChange}>
+        <option value='CITA-secp256k1' selected>CITA-secp256k1</option>
+        <option value='CITA-sm2'>CITA-sm2</option>
+      </select>
     </div>
   `
 const chainIdEl = yo `
@@ -326,7 +342,7 @@ const chainIdEl = yo `
       <input type="text"
       class="${css.col2}"
       id=${ids.chainId}
-      value=${defaultSets.chainId} >
+      value=${sets.chainId} >
     </div>
   `
 const versionEl = yo `
@@ -335,7 +351,7 @@ const versionEl = yo `
     <input type="text"
     class="${css.col2}"
     id=${ids.citaVersion}
-    value=${defaultSets.version} >
+    value=${sets.version} >
   </div>
 `
 const privateKeyEl = yo `
@@ -344,7 +360,7 @@ const privateKeyEl = yo `
       <input type="text"
       class="${css.col2}"
       id=${ids.privateKey}
-      value=${defaultSets.privateKey} >
+      value=${sets.privateKey} >
     </div>
   `
 const quotaLimitEl = yo `
@@ -353,7 +369,7 @@ const quotaLimitEl = yo `
       <input type="text"
         class="${css.col2}"
         id=${ids.quotaLimit}
-        value=${defaultSets.quotaLimit}
+        value=${sets.quotaLimit}
         title="Enter the quota"
         placeholder="Enter the quota"
       >
@@ -366,7 +382,7 @@ const citaValueEl = yo `
         type="text"
         class="${css.col2}"
         id=${ids.citaValue}
-        value=${defaultSets.value}
+        value=${sets.value}
         title="Enter the value"
         placeholder="Enter the value"
       k>
